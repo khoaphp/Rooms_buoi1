@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>CHAT</title>
+    <script src="jquery.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+    var socket = io("http://localhost:3000"); 
+    
+    socket.on("server-gui-ds-room", function(data){
+        $("#ds").html("");
+        console.log(data);
+        for(i in data){
+            $("#ds").append(`
+                <li>` + i + `</li>
+            `);
+        }
+    });
+
+    socket.on("server-chat", function(data){
+        $("#dsChat").append("<h2>"+data+"</h2>");
+    });
+
+    $(document).ready(function(){
+        $("#btnRoom").click(function(){
+            socket.emit("tao-room", $("#txtRoom").val());
+        });
+
+        $("#btnChat").click(function(){
+            socket.emit("chat", $("#txtMessage").val());
+        });
+    });
+    
+    </script>
+</head>
+<body>
+    <h2>CHAT</h2>
+    <input type="text" id="txtRoom" />
+    <input type="button" id="btnRoom" value="Room" />
+    <ul id="ds"></ul>
+    <hr/>
+    <input type="text" id="txtMessage" />
+    <input type="button" id="btnChat" value="Chat" />
+    <div id="dsChat"></div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>PLAYER</title>
+    <script src="jquery.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+    var socket = io("http://localhost:3000"); 
+    
+    socket.on("server-gui-ds", function(data){
+        $("#danhsach").html("");
+        data.forEach(function(p){
+            $("#danhsach").append(`
+                <h2>`+ p.ID + ` : ` + p.HOTEN + `</h2>
+            `);
+        });
+    });
+
+    socket.on("server-bao-winner", function(){
+        $("body").css("background-color", "yellow");
+    });
+
+    $(document).ready(function(){
+        $("#btnSend").click(function(){
+            var ten = $("#txtUn").val();
+            socket.emit("player-gui-ten", ten);
+        });
+    });
+
+    </script>
+</head>
+<body>
+    <h2>PLAYER</h2>
+    <input type="text" id="txtUn" />
+    <input type="button" id="btnSend" value="Chọn tên" />
+    <div id="danhsach"></div>
+</body>
+</html>
